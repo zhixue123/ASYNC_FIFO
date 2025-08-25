@@ -40,19 +40,19 @@ module TB_ASYNC_FIFO;
 
     // 测试1：写4个数据
     $display("Writing 4 data...");
-    for (i = 0; i < 4; i = i + 1) begin
+    for (i = 0; i < 8; i = i + 1) begin
       @(posedge wr_clk);
       wr_en = 1;
       wr_data = i + 100;
       #1;
-    end
-    @(posedge wr_clk);
-    wr_en = 0;
-    #200; // 等待足够时间同步
+      @(posedge wr_clk);
+      wr_en = 0;
+      #1;
 
+    end
     // 测试2：读4个数据
     $display("Reading 4 data...");
-    for (i = 0; i < 4; i = i + 1) begin
+    for (i = 0; i < 8; i = i + 1) begin
       @(posedge rd_clk);
       rd_en = 1;
       #1;
