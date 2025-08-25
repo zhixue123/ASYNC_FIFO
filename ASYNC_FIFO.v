@@ -110,7 +110,8 @@ assign wr_addr = wr_ptr[ADDR_WIDTH-1:0];
 assign rd_addr = rd_ptr[ADDR_WIDTH-1:0];
 
 
-always @(posedge wr_clk) begin
+always @(posedge wr_clk or negedge wr_rst_n) begin
+
   if (wr_en && !full) begin
     memory[wr_addr] <= wr_data;
   end
