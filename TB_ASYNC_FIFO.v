@@ -44,15 +44,15 @@ module TB_ASYNC_FIFO;
     $display("Time\tOperation\tData\t\tFull\tEmpty");
     $display("--------------------------------------------------");
     
-    // 启动并发的读写进程
+   
     fork
       // 写进程：写入20个数据
       begin
-        for (write_count = 0; write_count < 20; write_count = write_count + 1) begin
+        for (write_count = 0; write_count < 30; write_count = write_count + 1) begin
           @(posedge wr_clk);
           if (!full) begin
             wr_en = 1;
-            wr_data = write_count + 100; // 数据从100开始
+            wr_data = write_count + 100; 
             #1;
             $display("%0t\tWrite\t\t%4d\t\t%b\t%b", $time, wr_data, full, empty);
             @(posedge wr_clk);
@@ -60,7 +60,7 @@ module TB_ASYNC_FIFO;
             #1;
           end else begin
             $display("%0t\tWrite blocked\t-\t\t%b\t%b", $time, full, empty);
-            #10; // 等待一段时间再尝试
+            #10; 
           end
         end
         $display("=== 写入完成 ===");
@@ -68,8 +68,8 @@ module TB_ASYNC_FIFO;
       
       // 读进程：读取20个数据
       begin
-        #50; // 延迟开始读取，让FIFO中先有一些数据
-        for (read_count = 0; read_count < 20; read_count = read_count + 1) begin
+        #50; 
+        for (read_count = 0; read_count < 30; read_count = read_count + 1) begin
           @(posedge rd_clk);
           if (!empty) begin
             rd_en = 1;
@@ -80,17 +80,17 @@ module TB_ASYNC_FIFO;
             #1;
           end else begin
             $display("%0t\tRead blocked\t-\t\t%b\t%b", $time, full, empty);
-            #10; // 等待一段时间再尝试
+            #10; 
           end
         end
         $display("=== 读取完成 ===");
       end
     join
 
-    // 测试边界条件：写满和读空
+    
     $display("\n=== 测试边界条件 ===");
     
-    // 尝试写满FIFO
+    
     $display("=== 尝试写满FIFO ===");
     while (!full) begin
       @(posedge wr_clk);
@@ -104,7 +104,7 @@ module TB_ASYNC_FIFO;
       #1;
     end
     
-    // 尝试读空FIFO
+ 
     $display("=== 尝试读空FIFO ===");
     while (!empty) begin
       @(posedge rd_clk);
@@ -124,12 +124,12 @@ module TB_ASYNC_FIFO;
   initial begin
     $dumpfile("wave.vcd");
     $dumpvars(0, TB_ASYNC_FIFO);
-    #2000; // 设置仿真超时
+    #2000; 
     $display("仿真超时!");
     $finish;
   end
 
-  // 监控异常情况
+  
   always @(posedge wr_clk) begin
     if (wr_en && full) begin
       $display("%0t\tERROR: 在满状态下写入!", $time);

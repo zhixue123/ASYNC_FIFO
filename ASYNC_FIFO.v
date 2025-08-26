@@ -96,11 +96,11 @@ always @(posedge wr_clk or negedge wr_rst_n) begin
 end
 
 
-assign full = ((wr_ptr_gray[ADDR_WIDTH] != rd_ptr_gray_sync2[ADDR_WIDTH]) &&
-             (wr_ptr_gray[ADDR_WIDTH-1] != rd_ptr_gray_sync2[ADDR_WIDTH-1]) &&
-             (wr_ptr_gray[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2[ADDR_WIDTH-2:0]));
+//assign full = ((wr_ptr_gray[ADDR_WIDTH] != rd_ptr_gray_sync2[ADDR_WIDTH]) &&
+//              (wr_ptr_gray[ADDR_WIDTH-1] != rd_ptr_gray_sync2[ADDR_WIDTH-1]) &&
+//              (wr_ptr_gray[ADDR_WIDTH-2:0] == rd_ptr_gray_sync2[ADDR_WIDTH-2:0]));
 
-
+assign full = ((wr_ptr_gray[ADDR_WIDTH:ADDR_WIDTH-1]==~rd_ptr_gray_sync2[ADDR_WIDTH:ADDR_WIDTH-1])&&(wr_ptr_gray[1:0]==rd_ptr_gray_sync2[1:0]));
 
 assign    empty = (rd_ptr_gray == wr_ptr_gray_sync2);
 
